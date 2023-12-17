@@ -1,0 +1,30 @@
+/health:
+  get:
+    tags:
+        - health:
+    summary: Verifica a saúde do sistema
+    responses:
+      '200':
+        description: Sistema saudável
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                healthy:
+                  type: boolean
+                  description: Indica se o sistema está saudável
+                report:
+                  type: object
+                  description: Relatório detalhado da verificação de saúde
+components:
+  schemas:
+    HealthCheckReport:
+      type: object
+      properties:
+        healthy:
+          type: boolean
+          description: Indica se o sistema está saudável
+        report:
+          type: object
+          description: Relatório detalhado da verificação de saúde

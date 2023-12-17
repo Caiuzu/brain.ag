@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+
+  brain.ag-database:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+      POSTGRES_DB: brain_ag
+    container_name: brain.ag_db
+    ports:
+      - "5432:5432"

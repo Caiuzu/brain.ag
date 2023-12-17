@@ -18,8 +18,9 @@
 |
 */
 
-import Route from '@ioc:Adonis/Core/Route'
+import Route from '@ioc:Adonis/Core/Route';
+import './routes/healthcheck';
 
 Route.get('/', async () => {
   return { hello: 'world' }
-})
+});

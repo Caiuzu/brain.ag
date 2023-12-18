@@ -29,6 +29,11 @@ export default class Farm extends BaseModel {
 
   @computed()
   public get crops() {
+    
+    if (!this.$preloaded.farmCrops) {
+      return [];
+    }
+  
     return this.farmCrops.map((farmCrop) => {
       return {
         id: farmCrop.crop.id,

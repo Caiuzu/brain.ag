@@ -37,6 +37,19 @@ export default class FarmersController {
     }
   }
 
+  public async update({ params, request, response }: HttpContextContract) {
+    try {
+      const farmer = await Farmer.findOrFail(params.id);
+      const payload = request.only(['name', 'document', 'farm']);
+
+      await this.updateFarmerAndFarm(farmer, payload);
+
+      return response.ok(this.formatFarmerResponse(await this.findFarmerById(farmer.id)));
+    } catch (e) {
+      return response.notFound({ message: 'Farmer not found.' });
+    }
+  }
+
   private async preloadFarmers() {
     return Farmer.query()
       .preload('farm', (farmQuery) => {
@@ -74,6 +87,22 @@ export default class FarmersController {
   private async createOrUpdateFarmCrops(farmId: number, cropIds: number[]) {
     await FarmCrop.query().where('farmId', farmId).delete();
     return Promise.all(cropIds.map(cropId => FarmCrop.create({ farmId, cropId })));
+  }
+
+  private async updateFarmerAndFarm(farmer: Farmer, payload) {
+    farmer.merge({ name: payload.name, document: payload.document });
+    await farmer.save();
+
+    if (payload.farm) {
+      const farm = await Farm.findOrFail(farmer.farmId);
+      const { crops, ...farmData } = payload.farm;
+      farm.merge(farmData);
+      await farm.save();
+
+      if (crops) {
+        await this.createOrUpdateFarmCrops(farmer.farmId, crops);
+      }
+    }
   }
 
 }

@@ -1,10 +1,12 @@
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import MessagesCustom from './MessageCustom'
+import { schema, rules } from '@ioc:Adonis/Core/Validator';
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+import MessagesCustom from './MessageCustom';
 
-export default class FarmerValidator extends MessagesCustom {
+const REGEX = '([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})';
+
+export default class UpdateFarmerValidator extends MessagesCustom {
   constructor(protected ctx: HttpContextContract) {
-    super()
+    super();
   }
 
   public schema = schema.create({
@@ -12,8 +14,7 @@ export default class FarmerValidator extends MessagesCustom {
       rules.maxLength(180)
     ]),
     document: schema.string({}, [
-      rules.regex(new RegExp('([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})')),
-      rules.unique({ table: 'farmers', column: 'document' }),
+      rules.regex(new RegExp(REGEX)),
     ]),
     farm: schema.object().members({
       name: schema.string({ trim: true }),
@@ -36,6 +37,6 @@ export default class FarmerValidator extends MessagesCustom {
       )
     }),
 
-  })
+  });
 
 }

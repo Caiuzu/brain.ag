@@ -3,14 +3,16 @@ import Farm from 'App/Models/Farm';
 import FarmCrop from 'App/Models/FarmCrop';
 import Farmer from 'App/Models/Farmer';
 import Logger from '@ioc:Adonis/Core/Logger';
-import FarmerValidator from 'App/Validators/FarmerValidator';
+import StoreFarmerValidator from 'App/Validators/StoreFarmerValidator';
+import UpdateFarmerValidator from 'App/Validators/UpdateFarmerValidator';
+import FarmerConverter from 'App/Converters/FarmerConverter';
 
 export default class FarmersController {
 
   public async index({ response }: HttpContextContract) {
     try {
       const farmers = await this.preloadFarmers();
-      const formattedResponse = farmers.map(farmer => this.formatFarmerResponse(farmer));
+      const formattedResponse = farmers.map(FarmerConverter.toResponse);
 
       Logger.info('Listing Farmer completed successfully');
 
@@ -23,8 +25,8 @@ export default class FarmersController {
   public async show({ params, response }: HttpContextContract) {
     try {
       const farmer = await this.findFarmerById(params.id);
-      return response.ok(this.formatFarmerResponse(farmer));
-    } catch (e) {
+      return response.ok(FarmerConverter.toResponse(farmer));
+    } catch (error) {
       return response.notFound({ message: 'Farmer not found.' });
     }
   }
@@ -32,7 +34,7 @@ export default class FarmersController {
   public async store({ request, response }: HttpContextContract) {
     try {
 
-      const validatedData = await request.validate(FarmerValidator);
+      const validatedData = await request.validate(StoreFarmerValidator);
 
       const farm = await this.createFarm(validatedData.farm);
       const farmer = await this.createFarmer(validatedData, farm.id);
@@ -40,12 +42,14 @@ export default class FarmersController {
       await this.createOrUpdateFarmCrops(farm.id, validatedData.farm.crops);
 
       const farmFarmer = await this.findFarmerById(farmer.id);
-      const farmFarmerFormatted = this.formatFarmerResponse(farmFarmer);
+      const farmFarmerFormatted = FarmerConverter.toResponse(farmFarmer);
 
       Logger.info(`Farmer successfully created: ${farmer.id}`);
       return response.created(farmFarmerFormatted);
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      if (error.messages) {
+        return response.badRequest({ message: 'An error occurred while validating Farmer.', error: error.messages });
+      }
       return response.internalServerError({ message: 'An error occurred while creating Farmer.' });
     }
   }
@@ -54,13 +58,16 @@ export default class FarmersController {
     try {
       const farmer = await Farmer.findOrFail(params.id);
 
-      const validatedData = await request.validate(FarmerValidator);
+      const validatedData = await request.validate(UpdateFarmerValidator);
 
       await this.updateFarmerAndFarm(farmer, validatedData);
 
       Logger.info(`Farmer successfully updated: ${farmer.id}`);
-      return response.ok(this.formatFarmerResponse(await this.findFarmerById(farmer.id)));
-    } catch (e) {
+      return response.ok(FarmerConverter.toResponse(await this.findFarmerById(farmer.id)));
+    } catch (error) {
+      if (error.messages) {
+        return response.badRequest({ message: 'An error occurred while validating Farmer.', error: error.messages });
+      }
       return response.notFound({ message: 'Farmer not found.' });
     }
   }
@@ -78,7 +85,7 @@ export default class FarmersController {
 
       Logger.info(`Farmer successfully deleted: ${params.id}`);
       return response.ok({ message: 'Farmer successfully deleted.' });
-    } catch (e) {
+    } catch (error) {
       return response.notFound({ message: 'Farmer not found or error deleting.' });
     }
   }
@@ -91,13 +98,6 @@ export default class FarmersController {
         });
       })
       .exec();
-  }
-
-  //TODO: passar para um converter
-  private formatFarmerResponse(farmer: Farmer) {
-    const farmerJson = farmer.toJSON();
-    delete farmerJson.farm?.farmCrops;
-    return farmerJson;
   }
 
   private async findFarmerById(id: number) {

@@ -1,0 +1,32 @@
+components:
+  schemas:
+    FarmerResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identificador único do produtor rural
+        name:
+          type: string
+          description: Nome do produtor rural
+        document:
+          type: string
+          description: Documento do produtor rural
+        farmId:
+          type: integer
+          format: int64
+          description: Identificador da fazenda associada ao produtor
+        farm:
+          $ref: '#/components/schemas/FarmResponse'
+    FarmerRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nome do produtor rural
+        document:
+          type: string
+          description: Documento do produtor rural
+        farm:
+          $ref: '#/components/schemas/FarmRequest'

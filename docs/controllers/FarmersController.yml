@@ -1,0 +1,102 @@
+tags:
+  - name: farmer
+    description: Operações referentes ao Produtor
+paths:
+  /api/farmer:
+    get:
+      tags:
+        - farmer
+      summary: Lista todos os produtores rurais.
+      responses:
+        200:
+          description: Lista de produtores rurais
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FarmerResponse'
+
+    post:
+      tags:
+        - farmer
+      summary: Cria um novo produtor rural.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FarmerRequest'
+      responses:
+        201:
+          description: Produtor rural criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FarmerResponse'
+
+  /api/farmer/{id}:
+    get:
+      tags:
+        - farmer
+      summary: Retorna um produtor rural específico pelo seu ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do produtor rural
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Detalhes do produtor rural
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FarmerResponse'
+        404:
+          description: Produtor rural não encontrado
+
+    put:
+      tags:
+        - farmer
+      summary: Atualiza um produtor rural.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do produtor rural
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FarmerRequest'
+      responses:
+        200:
+          description: Produtor rural atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FarmerResponse'
+        404:
+          description: Produtor rural não encontrado
+
+    delete:
+      tags:
+        - farmer
+      summary: Deleta um produtor rural.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do produtor rural
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Produtor rural deletado com sucesso
+        404:
+          description: Produtor rural não encontrado

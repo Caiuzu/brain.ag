@@ -2,13 +2,22 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import Farm from 'App/Models/Farm';
 import FarmCrop from 'App/Models/FarmCrop';
 import Farmer from 'App/Models/Farmer';
+import Logger from '@ioc:Adonis/Core/Logger';
+import FarmerValidator from 'App/Validators/FarmerValidator';
 
 export default class FarmersController {
 
   public async index({ response }: HttpContextContract) {
-    const farmers = await this.preloadFarmers();
-    const formattedResponse = farmers.map(farmer => this.formatFarmerResponse(farmer));
-    return response.ok(formattedResponse);
+    try {
+      const farmers = await this.preloadFarmers();
+      const formattedResponse = farmers.map(farmer => this.formatFarmerResponse(farmer));
+
+      Logger.info('Listing Farmer completed successfully');
+
+      return response.ok(formattedResponse);
+    } catch (e) {
+      return response.notFound({ message: 'Error when listing Farmers.' });
+    }
   }
 
   public async show({ params, response }: HttpContextContract) {
@@ -22,14 +31,18 @@ export default class FarmersController {
 
   public async store({ request, response }: HttpContextContract) {
     try {
-      const payload = request.only(['name', 'document', 'farm']);
-      const farm = await this.createFarm(payload.farm);
-      const farmer = await this.createFarmer(payload, farm.id);
-      await this.createOrUpdateFarmCrops(farm.id, payload.farm.crops);
+
+      const validatedData = await request.validate(FarmerValidator);
+
+      const farm = await this.createFarm(validatedData.farm);
+      const farmer = await this.createFarmer(validatedData, farm.id);
+
+      await this.createOrUpdateFarmCrops(farm.id, validatedData.farm.crops);
 
       const farmFarmer = await this.findFarmerById(farmer.id);
       const farmFarmerFormatted = this.formatFarmerResponse(farmFarmer);
 
+      Logger.info(`Farmer successfully created: ${farmer.id}`);
       return response.created(farmFarmerFormatted);
     } catch (e) {
       console.error(e);
@@ -40,10 +53,12 @@ export default class FarmersController {
   public async update({ params, request, response }: HttpContextContract) {
     try {
       const farmer = await Farmer.findOrFail(params.id);
-      const payload = request.only(['name', 'document', 'farm']);
 
-      await this.updateFarmerAndFarm(farmer, payload);
+      const validatedData = await request.validate(FarmerValidator);
 
+      await this.updateFarmerAndFarm(farmer, validatedData);
+
+      Logger.info(`Farmer successfully updated: ${farmer.id}`);
       return response.ok(this.formatFarmerResponse(await this.findFarmerById(farmer.id)));
     } catch (e) {
       return response.notFound({ message: 'Farmer not found.' });
@@ -61,6 +76,7 @@ export default class FarmersController {
 
       await farmer.delete();
 
+      Logger.info(`Farmer successfully deleted: ${params.id}`);
       return response.ok({ message: 'Farmer successfully deleted.' });
     } catch (e) {
       return response.notFound({ message: 'Farmer not found or error deleting.' });
@@ -77,6 +93,7 @@ export default class FarmersController {
       .exec();
   }
 
+  //TODO: passar para um converter
   private formatFarmerResponse(farmer: Farmer) {
     const farmerJson = farmer.toJSON();
     delete farmerJson.farm?.farmCrops;

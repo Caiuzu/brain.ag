@@ -1,0 +1,21 @@
+components:
+  schemas:
+    FarmCrop:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identificador único da relação fazenda-cultura
+        farmId:
+          type: integer
+          format: int64
+          description: Identificador da fazenda
+        cropId:
+          type: integer
+          format: int64
+          description: Identificador da cultura
+        farm:
+          $ref: '#/components/schemas/Farm'
+        crop:
+          $ref: '#/components/schemas/Crop'

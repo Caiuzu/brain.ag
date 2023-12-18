@@ -1,0 +1,94 @@
+tags:
+  - name: dashboard
+    description: Operações referentes a dashboard
+/api/dashboard/total-farms:
+  get:
+    tags:
+      - dashboard
+    summary: Retorna o total de fazendas e a área total.
+    responses:
+      200:
+        description: Dados totais das fazendas
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                totalFarms:
+                  type: integer
+                  description: Total de fazendas
+                totalArea:
+                  type: number
+                  format: double
+                  description: Área total das fazendas
+
+/api/dashboard/farms-by-state:
+  get:
+    tags:
+      - dashboard
+    summary: Retorna a contagem de fazendas por estado.
+    responses:
+      200:
+        description: Contagem de fazendas agrupadas por estado
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  state:
+                    type: string
+                    description: Nome do estado
+                  total:
+                    type: integer
+                    description: Número total de fazendas no estado
+
+/api/dashboard/farms-by-crop:
+  get:
+    tags:
+      - dashboard
+    summary: Retorna a contagem de fazendas por cultura.
+    responses:
+      200:
+        description: Contagem de fazendas agrupadas por cultura
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Nome da cultura
+                  total:
+                    type: integer
+                    description: Número total de fazendas com essa cultura
+
+/api/dashboard/land-use:
+  get:
+    tags:
+      - dashboard
+    summary: Retorna o uso da terra por estado.
+    responses:
+      200:
+        description: Detalhes do uso da terra agrupados por estado
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  state:
+                    type: string
+                    description: Nome do estado
+                  agricultural:
+                    type: number
+                    format: double
+                    description: Área agrícola do estado
+                  vegetation:
+                    type: number
+                    format: double
+                    description: Área de vegetação do estado

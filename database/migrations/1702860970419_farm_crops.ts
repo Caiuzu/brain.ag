@@ -7,8 +7,8 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
 
       table.increments('id').primary();
-      table.integer('farm_id').unsigned().references('farms.id').onDelete('CASCADE');
-      table.integer('crop_id').unsigned().references('crops.id').onDelete('CASCADE');
+      table.integer('farm_id').notNullable().unsigned().references('farms.id').onDelete('CASCADE');
+      table.integer('crop_id').notNullable().unsigned().references('crops.id').onDelete('CASCADE');
 
     });
   }

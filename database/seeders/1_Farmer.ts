@@ -16,7 +16,16 @@ export default class extends BaseSeeder {
           total_area: 1000,
           agricultural_area: 800,
           vegetation_area: 200,
-          crops: [1, 2],
+          crops: [
+            {
+              id: 3,
+              name: 'Algodão'
+            },
+            {
+              "id": 4,
+              name: 'Café'
+            }
+          ],
         },
       },
       {
@@ -28,23 +37,32 @@ export default class extends BaseSeeder {
           city: 'Cuiabá',
           total_area: 1200,
           agricultural_area: 920,
-          vegetation_area: 312,
-          crops: [3, 4],
+          vegetation_area: 200,
+          crops: [
+            {
+              id: 1,
+              name: 'Soja'
+            },
+            {
+              id: 2,
+              name: 'Milho'
+            }
+          ],
         },
       },
     ];
 
     for (const data of farmFarmerData) {
       const { farm, ...farmerData } = data;
+      const { crops, ...restFarmData } = farm;
 
-      const createdFarm = await Farm.create({ ...farm });
-
+      const createdFarm = await Farm.create(restFarmData);
       await Farmer.create({ ...farmerData, farmId: createdFarm.id });
 
-      for (const cropId of farm.crops) {
+      for (const crop of crops) {
         await FarmCrop.create({
           farmId: createdFarm.id,
-          cropId,
+          cropId: crop.id,
         });
       }
     }

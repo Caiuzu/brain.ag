@@ -26,10 +26,10 @@ export default class FarmersController {
       const farm = await this.createFarm(payload.farm);
       const farmer = await this.createFarmer(payload, farm.id);
       await this.createOrUpdateFarmCrops(farm.id, payload.farm.crops);
-  
+
       const farmFarmer = await this.findFarmerById(farmer.id);
       const farmFarmerFormatted = this.formatFarmerResponse(farmFarmer);
-  
+
       return response.created(farmFarmerFormatted);
     } catch (e) {
       console.error(e);
@@ -47,6 +47,18 @@ export default class FarmersController {
       return response.ok(this.formatFarmerResponse(await this.findFarmerById(farmer.id)));
     } catch (e) {
       return response.notFound({ message: 'Farmer not found.' });
+    }
+  }
+
+  public async destroy({ params, response }: HttpContextContract) {
+    try {
+      const farmer = await Farmer.findOrFail(params.id);
+
+      await farmer.delete();
+
+      return response.ok({ message: 'Farmer successfully deleted.' });
+    } catch (e) {
+      return response.notFound({ message: 'Farmer not found or error deleting.' });
     }
   }
 

@@ -16,36 +16,25 @@ export default class FarmersController {
       const farmer = await this.findFarmerById(params.id);
       return response.ok(this.formatFarmerResponse(farmer));
     } catch (e) {
-      return response.notFound({ message: 'Farmer não encontrado.' });
+      return response.notFound({ message: 'Farmer not found.' });
     }
   }
 
   public async store({ request, response }: HttpContextContract) {
-
-    const payload = request.only(['name', 'document', 'farm']);
-    const farmData = payload.farm;
-    const cropIds = farmData.crops;
-    delete farmData.crops;
-
-    const farm = await Farm.create(farmData);
-
-    const farmer = await Farmer.create({
-      name: payload.name,
-      document: payload.document,
-      farmId: farm.id
-    });
-
-    await Promise.all(cropIds.map((cropId: number) => {
-      return FarmCrop.create({
-        farmId: farm.id,
-        cropId
-      });
-    }));
-
-    const farmFarmer = await this.findFarmerById(farmer.id);
-    const farmFarmerFormatted = this.formatFarmerResponse(farmFarmer);
-
-    return response.created(farmFarmerFormatted);
+    try {
+      const payload = request.only(['name', 'document', 'farm']);
+      const farm = await this.createFarm(payload.farm);
+      const farmer = await this.createFarmer(payload, farm.id);
+      await this.createOrUpdateFarmCrops(farm.id, payload.farm.crops);
+  
+      const farmFarmer = await this.findFarmerById(farmer.id);
+      const farmFarmerFormatted = this.formatFarmerResponse(farmFarmer);
+  
+      return response.created(farmFarmerFormatted);
+    } catch (e) {
+      console.error(e);
+      return response.internalServerError({ message: 'An error occurred while creating Farmer.' });
+    }
   }
 
   private async preloadFarmers() {
@@ -71,6 +60,20 @@ export default class FarmersController {
         farmQuery.preload('farmCrops', farmCropQuery =>
           farmCropQuery.preload('crop')))
       .firstOrFail();
+  }
+
+  private async createFarm(farmData): Promise<Farm> {
+    const { crops, ...data } = farmData;
+    return Farm.create(data);
+  }
+
+  private async createFarmer(farmerData, farmId): Promise<Farmer> {
+    return Farmer.create({ ...farmerData, farmId });
+  }
+
+  private async createOrUpdateFarmCrops(farmId: number, cropIds: number[]) {
+    await FarmCrop.query().where('farmId', farmId).delete();
+    return Promise.all(cropIds.map(cropId => FarmCrop.create({ farmId, cropId })));
   }
 
 }

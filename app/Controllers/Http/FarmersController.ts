@@ -54,6 +54,11 @@ export default class FarmersController {
     try {
       const farmer = await Farmer.findOrFail(params.id);
 
+      if (farmer.farmId) {
+        await FarmCrop.query().where('farmId', farmer.farmId).delete();
+        await Farm.findOrFail(farmer.farmId).then((farm) => farm.delete());
+      }
+
       await farmer.delete();
 
       return response.ok({ message: 'Farmer successfully deleted.' });

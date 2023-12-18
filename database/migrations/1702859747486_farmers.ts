@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       table.increments('id').primary();
       table.string('name').notNullable();
       table.string('document').notNullable().unique();
-      table.integer('farm_id').unsigned().references('farms.id').onDelete('CASCADE');
+      table.integer('farm_id').notNullable().unsigned().references('farms.id').onDelete('CASCADE');
 
     });
   }

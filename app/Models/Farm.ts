@@ -1,5 +1,5 @@
-import { BaseModel, HasMany, column, hasMany } from '@ioc:Adonis/Lucid/Orm';
-import Crop from './Crop';
+import { BaseModel, HasMany, column, computed, hasMany } from '@ioc:Adonis/Lucid/Orm';
+import FarmCrop from './FarmCrop';
 
 export default class Farm extends BaseModel {
 
@@ -16,14 +16,24 @@ export default class Farm extends BaseModel {
   public city: string;
 
   @column()
-  public total_area: number;
+  public totalArea: number;
 
   @column()
-  public agricultural_area: number;
+  public agriculturalArea: number;
 
   @column()
-  public vegetation_area: number;
+  public vegetationArea: number;
 
-  @hasMany(() => Crop)
-  public crops: HasMany<typeof Crop>;
+  @hasMany(() => FarmCrop)
+  public farmCrops: HasMany<typeof FarmCrop>;
+
+  @computed()
+  public get crops() {
+    return this.farmCrops.map((farmCrop) => {
+      return {
+        id: farmCrop.crop.id,
+        name: farmCrop.crop.name
+      };
+    });
+  }
 }

@@ -11,3 +11,13 @@ services:
     container_name: brain.ag_db
     ports:
       - "5432:5432"
+
+  brain.ag-database-test:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: test
+      POSTGRES_USER: test
+      POSTGRES_DB: brain_ag
+    container_name: brain.ag_db-test
+    ports:
+      - "5433:5432"

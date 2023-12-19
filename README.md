@@ -69,8 +69,11 @@ As seguintes ferramentas foram usadas na construção do projeto:
 # Execute as seeds:
  node ace db:seed
 
- # Execute o servidor:
- node ace server run --watch
+# Execute o servidor:
+node ace server run --watch
+
+# Acesse o swagger-ui
+http://localhost:3333/docs
 ```
 
 ---

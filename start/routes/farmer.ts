@@ -6,4 +6,4 @@ Route.group(() => {
     Route.post('/farmer', 'FarmersController.store')
     Route.put('/farmer/:id', 'FarmersController.update')
     Route.delete('/farmer/:id', 'FarmersController.destroy')
-}).prefix('/api')
+}).prefix('/api');

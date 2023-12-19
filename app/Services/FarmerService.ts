@@ -20,27 +20,37 @@ export default class FarmerService implements FarmerServiceInterface {
 
     public async updateFarmer(farmerId: number, data: FarmerData): Promise<Farmer> {
         const farmer = await Farmer.findOrFail(farmerId);
-
+    
         farmer.merge({ name: data.name, document: data.document });
         await farmer.save();
-
+    
         if (data.farm) {
             const { crops, ...farmData } = data.farm;
-            const farm = await Farm.findOrFail(farmer.farmId);
-            farm.merge(farmData);
-            await farm.save();
+            let farm = await Farm.find(farmer.farmId);
+    
+            if (!farm) {
+                farm = new Farm();
+                const { name, state, city, totalArea, agriculturalArea, vegetationArea } = farmData;
+                Object.assign(farm, { name, state, city, totalArea, agriculturalArea, vegetationArea });
 
+                await farmer.related('farm').associate(farm);
+            } else {
+                farm.merge(farmData);
+                await farm.save();
+            }
+    
             await this.createOrUpdateFarmCrops(farmer.farmId, crops);
         }
-
+    
         await farmer.load('farm', (farmQuery) => {
             farmQuery.preload('farmCrops', (farmCropQuery) => {
                 farmCropQuery.preload('crop');
             });
         });
-
+    
         return farmer;
     }
+    
 
     public async deleteFarmer(farmer: Farmer): Promise<void> {
 

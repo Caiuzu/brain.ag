@@ -74,6 +74,10 @@ node ace server run --watch
 
 # Acesse o swagger-ui
 http://localhost:3333/docs
+
+# Execute os testes:
+# Para rodar os testes é necessário que o docker esteja running
+node ace test
 ```
 
 ---

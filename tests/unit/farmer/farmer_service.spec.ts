@@ -94,7 +94,6 @@ test.group('FarmerService', (group) => {
 
     assert.isNull(deletedFarmer);
     assert.isNull(deletedFarm);
-  })
+  });
 
-
-})
+});

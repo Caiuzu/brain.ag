@@ -72,9 +72,9 @@ test.group('Dashboard Controller', (group) => {
     response.assertStatus(200);
 
     response.body().forEach(item => {
-      assert.property(item, 'state')
-      assert.match(item.agricultural, DIGITS_WITH_OPTIONAL_DECIMAL)
-      assert.match(item.vegetation, DIGITS_WITH_OPTIONAL_DECIMAL)
+      assert.property(item, 'state');
+      assert.match(item.agricultural, DIGITS_WITH_OPTIONAL_DECIMAL);
+      assert.match(item.vegetation, DIGITS_WITH_OPTIONAL_DECIMAL);
     });
 
     assert.deepEqual(response.body(), [
@@ -87,6 +87,6 @@ test.group('Dashboard Controller', (group) => {
       { state: "São Paulo", agricultural: "650.00", vegetation: "200.00" },
       { state: "Mato Grosso", agricultural: "920.00", vegetation: "200.00" }
     ]);
-  })
+  });
 
-})
+});

@@ -1,11 +1,12 @@
 import Farm from 'App/Models/Farm';
 import Farmer from 'App/Models/Farmer';
 import FarmCrop from 'App/Models/FarmCrop';
+import { FarmerData } from 'App/Interfaces/FarmerData';
+import FarmerServiceInterface from 'App/Interfaces/FarmerServiceInterface';
 
+export default class FarmerService implements FarmerServiceInterface {
 
-export default class FarmerService {
-
-    public async createFarmer(data: any): Promise<Farmer> {
+    public async createFarmer(data: FarmerData): Promise<Farmer> {
 
         const farm = await this.createFarm(data.farm);
         const farmer = await this.createFarmerData(data, farm.id);
@@ -17,7 +18,7 @@ export default class FarmerService {
         return farmFarmer;
     }
 
-    public async updateFarmer(farmerId: number, data: any): Promise<Farmer> {
+    public async updateFarmer(farmerId: number, data: FarmerData): Promise<Farmer> {
         const farmer = await Farmer.findOrFail(farmerId);
 
         farmer.merge({ name: data.name, document: data.document });

@@ -4,6 +4,7 @@ import StoreFarmerValidator from 'App/Validators/StoreFarmerValidator';
 import UpdateFarmerValidator from 'App/Validators/UpdateFarmerValidator';
 import FarmerConverter from 'App/Converters/FarmerConverter';
 import FarmerService from 'App/Services/FarmerService';
+import { FarmerData } from 'App/Interfaces/FarmerData';
 
 export default class FarmersController {
   private farmerService = new FarmerService();
@@ -16,7 +17,7 @@ export default class FarmersController {
       Logger.info('Listing Farmer completed successfully');
 
       return response.ok(formattedResponse);
-    } catch (e) {
+    } catch (error) {
       return response.notFound({ message: 'Error when listing Farmers.' });
     }
   }
@@ -32,7 +33,7 @@ export default class FarmersController {
 
   public async store({ request, response }: HttpContextContract) {
     try {
-      const validatedData = await request.validate(StoreFarmerValidator);
+      const validatedData: FarmerData = await request.validate(StoreFarmerValidator) as FarmerData;
       const farmer = await this.farmerService.createFarmer(validatedData);
 
       const farmFarmerFormatted = FarmerConverter.toResponse(farmer);
@@ -50,7 +51,7 @@ export default class FarmersController {
   public async update({ params, request, response }: HttpContextContract) {
     try {
 
-      const validatedData = await request.validate(UpdateFarmerValidator);
+      const validatedData: FarmerData = await request.validate(UpdateFarmerValidator) as FarmerData;
 
       const farmer = await this.farmerService.updateFarmer(params.id, validatedData);
 

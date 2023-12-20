@@ -10,5 +10,3 @@ components:
         name:
           type: string
           description: Nome da cultura
-        farm:
-          $ref: '#/components/schemas/Farm'

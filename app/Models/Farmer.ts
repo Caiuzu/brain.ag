@@ -1,19 +1,19 @@
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm';
-import Farm from './Farm';
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import Farm from './Farm'
 
 export default class Farmer extends BaseModel {
   @column({ isPrimary: true })
-  public id: number;
+  public id: number
 
   @column()
-  public name: string;
+  public name: string
 
   @column()
-  public document: string;
+  public document: string
 
   @column()
-  public farmId: number;
+  public farmId: number
 
   @belongsTo(() => Farm)
-  public farm: BelongsTo<typeof Farm>;
+  public farm: BelongsTo<typeof Farm>
 }

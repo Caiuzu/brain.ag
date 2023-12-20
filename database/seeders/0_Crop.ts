@@ -1,5 +1,5 @@
-import BaseSeeder from '@ioc:Adonis/Lucid/Seeder';
-import Crop from 'App/Models/Crop';
+import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
+import Crop from 'App/Models/Crop'
 
 export default class extends BaseSeeder {
   public async run() {
@@ -9,6 +9,6 @@ export default class extends BaseSeeder {
       { name: 'Algodão' },
       { name: 'Café' },
       { name: 'Cana de Açúcar' },
-    ]);
+    ])
   }
 }

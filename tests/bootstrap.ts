@@ -50,7 +50,7 @@ export const runnerHooks: Pick<Required<Config>, 'setup' | 'teardown'> = {
   setup: [
     () => TestUtils.ace().loadCommands(),
     () => TestUtils.db().migrate(),
-    () => TestUtils.db().seed()
+    () => TestUtils.db().seed(),
   ],
   teardown: [],
 }

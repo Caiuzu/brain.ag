@@ -1,7 +1,6 @@
 version: '3.7'
 
 services:
-
   brain.ag-database:
     image: postgres:latest
     environment:
@@ -10,7 +9,7 @@ services:
       POSTGRES_DB: brain_ag
     container_name: brain.ag_db
     ports:
-      - "5432:5432"
+      - '5432:5432'
 
   brain.ag-database-test:
     image: postgres:latest
@@ -20,4 +19,4 @@ services:
       POSTGRES_DB: brain_ag
     container_name: brain.ag_db-test
     ports:
-      - "5433:5432"
+      - '5433:5432'

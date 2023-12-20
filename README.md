@@ -1,5 +1,3 @@
-
-
 <!--Banner e logo-->
 
 <div align="center">
@@ -20,8 +18,7 @@
  <a href="#-sobre-o-projeto">Sobre</a> •
  <a href="#-tecnologias">Tecnologias</a> •
   <a href="#-funcionalidades">Funcionalidades</a> •
- <a href="#-como-executar-o-projeto">Executando</a> 
-
+ <a href="#-como-executar-o-projeto">Executando</a>
 
 ## 💻 Sobre o projeto
 
@@ -42,21 +39,19 @@ As seguintes ferramentas foram usadas na construção do projeto:
 
 ## ⚙️ Funcionalidades
 
-  - [x]  **Cadastro e Gestão de Fazendas**: Permite o registro e a atualização de informações sobre fazendas, incluindo dados como localização, área total, área agrícola e área de vegetação.
+- [x] **Cadastro e Gestão de Fazendas**: Permite o registro e a atualização de informações sobre fazendas, incluindo dados como localização, área total, área agrícola e área de vegetação.
 
-  - [x]  **Gerenciamento de Culturas**: Facilita o gerenciamento de diferentes tipos de culturas plantadas nas fazendas.
+- [x] **Gerenciamento de Culturas**: Facilita o gerenciamento de diferentes tipos de culturas plantadas nas fazendas.
 
-  - [x]  **Controle de Produtores Rurais**: Oferece funcionalidades para adicionar, editar e remover produtores rurais, associando-os às suas respectivas fazendas e culturas.
+- [x] **Controle de Produtores Rurais**: Oferece funcionalidades para adicionar, editar e remover produtores rurais, associando-os às suas respectivas fazendas e culturas.
 
-  - [x]  **Relatórios e Dashboards**: Gera dados para relatórios e dashboards detalhados, fornecendo insights sobre a distribuição das fazendas por estado, tipos de culturas plantadas e a utilização do solo.
-
+- [x] **Relatórios e Dashboards**: Gera dados para relatórios e dashboards detalhados, fornecendo insights sobre a distribuição das fazendas por estado, tipos de culturas plantadas e a utilização do solo.
 
 ---
 
-
 ## 🚀 Como executar o projeto
 
-``` bash
+```bash
 # Clone este repositório:
  git clone git@github.com:Caiuzu/brain.ag.git
 
@@ -81,6 +76,7 @@ node ace test
 ```
 
 ---
+
 ## Utilitários
 
 - Editor: **[Visual Studio Code](https://code.visualstudio.com/)**
@@ -88,13 +84,12 @@ node ace test
 - API Platform: **[Postaman](https://www.postman.com)**
 - Container Management: **[Portainer](https://www.portainer.io)**
 
-
 ---
+
 ## 📝 Licença
 
 Este projeto está sob a licença [MIT](./LICENSE).
 
 ---
-
 
 <h4 align=center>Desenvolvido por Caio Souza <a href="https://www.linkedin.com/in/caiuzu/"> <strong>Entre em contato</strong> ;D</a></h4>
